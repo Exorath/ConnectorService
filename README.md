@@ -3,7 +3,7 @@ Quickly allows servers to send players to games based on the game type, map and 
 
 ##Endpoints
 
-###/servers/{gameId} [GET]:
+###/servers/find/{gameId} [GET]:
 ####Gets general information about the running servers of the specified game type
 **Arguments**:
 - gameId (string): The id of the game
