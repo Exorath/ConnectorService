@@ -7,9 +7,10 @@ Quickly allows servers to send players to games based on the game type, map and 
 ####Gets general information about the running servers of the specified game type
 **Arguments**:
 - gameId (string): The id of the game
-**Response**: {pc: 24, sc: 2}
-- pc (int): The amount of players currently playing
+**Response**: {pc: 24, sc: 3, osc: 1}
+- pc (int): The amount of players currently on the game servers of this gameId
 - sc (int): The amount of servers of this game type
+- osc(int): The amount of servers of this game type that are open for joining.
 - err (string)[OPTIONAL]: Error message when the get failed
 
 ###/servers/{serverUuid}/ [PUT]:
@@ -19,10 +20,13 @@ Quickly allows servers to send players to games based on the game type, map and 
 - gameId (string): The gameId of the server instance
 - mapId (string): The mapId of the server instance
 - flavorId (string): The flavorId of the server instance
-- ttl (number): Time to live of this record
-**Response**: {pc: 24, sc: 2}
-- pc (int): The amount of players currently playing
-- sc (int): The amount of servers of this game type
+- ttl (int): Time to live of this record in seconds
+- pc (int): Amount of players currently on this server
+- mpc (int): Maximum amount of players allowed on this server
+- joinable (boolean): Whether or not this server can be joined
+**Response**: {success: true}
+- success (boolean): Whether or not the record was updated successfully 
+- err (string)[OPTIONAL]: Error message only responded when the update was not successful.
 - err (string)[OPTIONAL]: Error message when the get failed
 
 ###/servers/{gameId}/player/{uuid} [POST]:
@@ -33,7 +37,7 @@ Quickly allows servers to send players to games based on the game type, map and 
 - mapId (string)[OPTIONAL]: The mapId of the server that the player should join
 - flavorId (string)[OPTIONAL]: The flavorId is a requirement put on the flavor of the game, this is optional to specify stuff like "teams", "doubles", "solo"...
 
-**Response**: {"success": false,"sid": "2f132baf-f714-4a04-b58d-e012ea80a703"}
+**Response**: {"success": true,"sid": "2f132baf-f714-4a04-b58d-e012ea80a703"}
 - success (boolean): Whether or not the player will be teleported to a server.
 - sid (string)[OPTIONAL]: The server id the player is connecting too.
 - err (string)[OPTIONAL]: An error string that describes why the player was not connected to the server Only provided when success=*false*.
