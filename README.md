@@ -3,7 +3,7 @@ Quickly allows servers to send players to games based on the game type, map and 
 
 ##Endpoints
 
-###/servers/{gameId}/ [GET]:
+###/servers/{gameId} [GET]:
 ####Gets general information about the running servers of the specified game type
 **Arguments**:
 - gameId (string): The id of the game
@@ -13,7 +13,7 @@ Quickly allows servers to send players to games based on the game type, map and 
 - osc(int): The amount of servers of this game type that are open for joining.
 - err (string)[OPTIONAL]: Error message when the get failed
 
-###/servers/{serverUuid}/ [PUT]:
+###/servers/{serverUuid} [PUT]:
 ####Updates the server record.
 **Arguments**:
 - serverUuid (string): The unique id of this server
