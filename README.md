@@ -13,7 +13,7 @@ Quickly allows servers to send players to games based on the game type, map and 
 - osc(int): The amount of servers of this game type that are open for joining.
 - err (string)[OPTIONAL]: Error message when the get failed
 
-###/servers/{serverUuid} [PUT]:
+###/servers/{serverUuid}?gameId=1234&mapId=1234&flavorId=1234&ttl=120&pc=5&mpc=16&joinable=true [PUT]:
 ####Updates the server record.
 **Arguments**:
 - serverUuid (string): The unique id of this server
@@ -29,7 +29,7 @@ Quickly allows servers to send players to games based on the game type, map and 
 - err (string)[OPTIONAL]: Error message only responded when the update was not successful.
 - err (string)[OPTIONAL]: Error message when the get failed
 
-###/servers/{gameId}/player/{uuid} [POST]:
+###/servers/{gameId}/player/{uuid}?mapId=1234&flavorId=1234 [POST]:
 ####Makes the player join an open instance of the game.
 **Arguments**:
 - gameId (string): The id of the game
