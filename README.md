@@ -7,13 +7,14 @@ Quickly allows servers to send players to games based on the game type, map and 
 ####Gets general information about the running servers of the specified game type
 **Arguments**:
 - gameId (string): The id of the game
+
 **Response**: {pc: 24, sc: 3, osc: 1}
 - pc (int): The amount of players currently on the game servers of this gameId
 - sc (int): The amount of servers of this game type
 - osc(int): The amount of servers of this game type that are open for joining.
 - err (string)[OPTIONAL]: Error message when the get failed
 
-###/servers/{serverUuid}?gameId=1234&mapId=1234&flavorId=1234&ttl=120&pc=5&mpc=16&joinable=true [PUT]:
+###/servers/{serverUuid}?gameId={gameId}&mapId={mapId}&flavorId={f;avorId}&ttl={ttl}&pc={pc}&mpc={mpc}&joinable={joinable}&address={address} [PUT]:
 ####Updates the server record.
 **Arguments**:
 - serverUuid (string): The unique id of this server
@@ -23,7 +24,9 @@ Quickly allows servers to send players to games based on the game type, map and 
 - ttl (int): Time to live of this record in seconds
 - pc (int): Amount of players currently on this server
 - mpc (int): Maximum amount of players allowed on this server
+- address (string): Address formated as ip:port
 - joinable (boolean): Whether or not this server can be joined
+
 **Response**: {success: true}
 - success (boolean): Whether or not the record was updated successfully 
 - err (string)[OPTIONAL]: Error message only responded when the update was not successful.
