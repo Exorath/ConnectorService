@@ -16,26 +16,22 @@
 
 package com.exorath.service.connector.res;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by toonsev on 11/3/2016.
  */
 public class Success {
+    @SerializedName("success")
     private boolean success;
-    private String err;
+    @SerializedName("err")
+    private String error;
 
     public Success(boolean success){
         this.success = success;
     }
-    public Success(boolean success, String err){
+    public Success(boolean success, String error){
         this.success = success;
-        this.err = err;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public String getErr() {
-        return err;
+        this.error = error;
     }
 }

@@ -16,8 +16,18 @@
 
 package com.exorath.service.connector.res;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by toonsev on 11/3/2016.
  */
 public class ServerInfo {
+    @SerializedName("pc")
+    private int playerCount;
+    @SerializedName("sc")
+    private int serverCount;
+    @SerializedName("osc")
+    private int openServerCount;
+    @SerializedName("opc")
+    private int openSlotCount;
 }

@@ -16,8 +16,20 @@
 
 package com.exorath.service.connector.res;
 
+
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by toonsev on 11/3/2016.
  */
 public class JoinRequest {
+    private transient String gameId;
+    @SerializedName("uuid")
+    private String playerId;
+    @SerializedName("lobby")
+    private boolean lobby = false;
+    @SerializedName("mapId")
+    private String mapId = null;
+    @SerializedName("flavorId")
+    private String flavorId = null;
 }

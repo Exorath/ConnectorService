@@ -16,8 +16,32 @@
 
 package com.exorath.service.connector.res;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by toonsev on 11/3/2016.
  */
 public class Server {
+    @SerializedName("serverId")
+    private String serverId;
+    @SerializedName("gameId")
+    private String gameId;
+    @SerializedName("socket")
+    private String socket;
+    @SerializedName("joinable")
+    private boolean joinable;
+    @SerializedName("mapId")
+    private String mapId = null;
+    @SerializedName("flavorId")
+    private String flavorId = null;
+    @SerializedName("expiry")
+    private long expiry;
+    @SerializedName("players")
+    private String[] players;
+    @SerializedName("pc")
+    private int playerCount;
+    @SerializedName("mpc")
+    private int maxPlayerCount = -1;
+    @SerializedName("lobby")
+    private boolean lobby = false;
 }

@@ -16,17 +16,21 @@
 
 package com.exorath.service.connector.res;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by toonsev on 11/3/2016.
  */
 public class LastGameResponse {
+    @SerializedName("gameId")
     private String gameId;
-    private String err;
+    @SerializedName("err")
+    private String error;
 
 
-    public LastGameResponse(String gameId, String err){
+    public LastGameResponse(String gameId, String error){
         this(gameId);
-        this.err = err;
+        this.error = error;
     }
 
     public LastGameResponse(String gameId){

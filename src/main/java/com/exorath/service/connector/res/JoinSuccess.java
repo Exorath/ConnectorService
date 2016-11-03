@@ -16,10 +16,13 @@
 
 package com.exorath.service.connector.res;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by toonsev on 11/3/2016.
  */
 public class JoinSuccess extends Success {
+    @SerializedName("sid")
     private String serverId;
     public JoinSuccess(String serverId, boolean success){
         super(success);

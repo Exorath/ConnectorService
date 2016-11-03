@@ -17,7 +17,7 @@ Quickly allows servers to send players to games based on the game type, map and 
 - osc(int): The amount of servers of this game type that are open for joining.
 - opc(int): The amount of player slots of this game type that are open for joining.
 
-###/servers/{serverUuid} [PUT]:
+###/servers/{serverId} [PUT]:
 ####Updates the server record.
 **body**:
 ```json
@@ -26,7 +26,7 @@ Quickly allows servers to send players to games based on the game type, map and 
 
 
 **Arguments**:
-- serverUuid (string): The unique id of this server
+- serverId (string): The unique id of this server
 - gameId (string): The gameId of the server instance
 - socket (string): Socket in address:port format
 - joinable (boolean): Whether or not this server can be joined
