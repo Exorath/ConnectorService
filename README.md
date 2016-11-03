@@ -3,7 +3,7 @@ Quickly allows servers to send players to games based on the game type, map and 
 
 ##Endpoints
 
-###/servers/find/{gameId} [GET]:
+###/servers/info/{gameId} [GET]:
 ####Gets general information about the running servers of the specified game type
 **Arguments**:
 - gameId (string): The id of the game
@@ -65,7 +65,7 @@ If lobby=*true*, the last game of this player will be updated to the provided ga
 {"success": true,"sid": "2f132baf-f714-4a04-b58d-e012ea80a703"}
 ```
 - success (boolean): Whether or not the player will be teleported to a server.
-- sid (string)[OPTIONAL]: The server id the player is connecting too.
+- sid (string)[OPTIONAL]: The uniqueId of the server the player is connecting to.
 - err (string)[OPTIONAL]: An error string that describes why the player was not connected to the server Only provided when success=*false*.
 
 ###/lastgame/player/{uuid} [GET]:
@@ -87,10 +87,10 @@ If lobby=*true*, the last game of this player will be updated to the provided ga
 
 **Response**: 
 ```json
-{"success": true,"suuid": "2f132baf-f714-4a04-b58d-e012ea80a703"}
+{"success": true,"sid": "2f132baf-f714-4a04-b58d-e012ea80a703"}
 ```
 - success (boolean): Whether or not the player will be teleported to a server.
-- suuid (string)[OPTIONAL]: The uniqueId of the server the player is connecting to.
+- sid (string)[OPTIONAL]: The uniqueId of the server the player is connecting to.
 - err (string)[OPTIONAL]: An error string that describes why the player was not connected to the server Only provided when success=*false*.
 
 ###/servers/update/ [POST]:
