@@ -3,19 +3,27 @@ Quickly allows servers to send players to games based on the game type, map and 
 
 ##Endpoints
 
-###/servers/info/{gameId} [GET]:
+###/servers/info/{gameId}?flavorId=teams&minLastUpdate=12342352343 [GET]:
 ####Gets general information about the running servers of the specified game type
+If the information is too outdated, this query will go over all online servers in the database to refetch the data.
+
 **Arguments**:
-- gameId (string): The id of the game
+- gameId (string) [OPTIONAL]: Filter on gameId
+- mapId (string)[OPTIONAL]: Filter  on mapId
+- flavorId (string)[OPTIONAL]: Filter on flavorId
+- minLastUpdate (num)[OPTIONAL]: Requires the data to be fetched after this time (if not, the data should be re-fetched), defaults to 0.
 
 **Response**: 
 ```json
-{"pc": 24, "sc": 3, "osc": 1, "opc": 16}
+{"pc": 24, "sc": 3, "osc": 1, "opc": 16, lastUpdate: 12342352345}
 ```
-- pc (int): The amount of players currently on the game servers of this gameId
-- sc (int): The amount of servers of this game type
-- osc(int): The amount of servers of this game type that are open for joining.
-- opc(int): The amount of player slots of this game type that are open for joining.
+- pc (num): The amount of players currently on the game servers of this gameId
+- sc (num): The amount of servers of this game type
+- osc(num): The amount of servers of this game type that are open for joining.
+- opc(num): The amount of player slots of this game type that are open for joining.
+- lastUpdate (num): Last time this record was updated, in UNIX notation
+
+An empty response will be given when there's no info yet.
 
 ###/servers/{serverId} [PUT]:
 ####Updates the server record.
@@ -59,31 +67,6 @@ If lobby=*true*, the last game of this player will be updated to the provided ga
 - lobby (boolean)[OPTIONAL]: Whether or not to join a gameId lobby (In this case the mapId and flavorId will be ignored)
 - mapId (string)[OPTIONAL]: The mapId of the server that the player should join
 - flavorId (string)[OPTIONAL]: The flavorId is a requirement put on the flavor of the game, this is optional to specify stuff like "teams", "doubles", "solo"...
-
-**Response**: 
-```json
-{"success": true,"sid": "2f132baf-f714-4a04-b58d-e012ea80a703"}
-```
-- success (boolean): Whether or not the player will be teleported to a server.
-- sid (string)[OPTIONAL]: The uniqueId of the server the player is connecting to.
-- err (string)[OPTIONAL]: An error string that describes why the player was not connected to the server Only provided when success=*false*.
-
-###/lastgame/player/{uuid} [GET]:
-####Gets the id of the last game this player has played.
-**Arguments**:
-- uuid (string): The player to fetch the last game type from
-
-**Response**: 
-```json
-{"gameId":"IW"}
-```
-- gameId (string)[OPTIONAL]: The id of the last game this player has played, not provided if there was none or an error occured.
-- err (string)[OPTIONAL]: Error message when an error occurs.
-
-###/lastgame/player/{uuid} [POST]:
-####Makes the player join an open lobby instance of the last lobby the player joined (defaults to an environment defined gameId).
-**Arguments**:
-- uuid (string): the player's uuid
 
 **Response**: 
 ```json

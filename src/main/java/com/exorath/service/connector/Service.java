@@ -23,15 +23,14 @@ import com.exorath.service.connector.res.*;
  */
 public interface Service {
 
-    ServerInfo getServerInfo(String gameId);
+    ServerInfo getServerInfo(String gameId, String mapId, String flavorId);
 
     Success updateServer(Server server);
 
     JoinSuccess joinServer(JoinRequest request);
 
-    LastGameResponse getLastGame(String uuid);
-
-    JoinSuccess joinLastGame(String uuid);
-
+    /**
+     * Purges old records and updates the counters.
+     */
     void update();
 }
