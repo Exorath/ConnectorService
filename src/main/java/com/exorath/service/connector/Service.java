@@ -28,9 +28,4 @@ public interface Service {
     Success updateServer(Server server);
 
     JoinSuccess joinServer(JoinRequest request);
-
-    /**
-     * Purges old records and updates the counters.
-     */
-    void update();
 }
