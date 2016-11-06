@@ -15,7 +15,7 @@ If the information is too outdated, this query will go over all online servers i
 
 **Response**: 
 ```json
-{"pc": 24, "sc": 3, "osc": 1, "opc": 16, lastUpdate: 12342352345}
+{"pc": 24, "sc": 3, "osc": 1, "opc": 16, "lastUpdate": 12342352345}
 ```
 - pc (num): The amount of players currently on the game servers of this gameId
 - sc (num): The amount of servers of this game type
