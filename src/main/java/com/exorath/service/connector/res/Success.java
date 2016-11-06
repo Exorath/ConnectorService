@@ -34,4 +34,12 @@ public class Success {
         this.success = success;
         this.error = error;
     }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public String getError() {
+        return error;
+    }
 }

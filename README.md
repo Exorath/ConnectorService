@@ -11,7 +11,7 @@ If the information is too outdated, this query will go over all online servers i
 - gameId (string) [OPTIONAL]: Filter on gameId
 - mapId (string)[OPTIONAL]: Filter  on mapId
 - flavorId (string)[OPTIONAL]: Filter on flavorId
-- minLastUpdate (num)[OPTIONAL]: Requires the data to be fetched after this time (if not, the data should be re-fetched), defaults to 0.
+- minLastUpdate (num)[OPTIONAL]: Requires the data to be at least younger then this time (in UNIX millis), if the current DB data is older, data will be re-fetched. Defaults to 0.
 
 **Response**: 
 ```json

@@ -44,4 +44,63 @@ public class Server {
     private int maxPlayerCount = -1;
     @SerializedName("lobby")
     private boolean lobby = false;
+
+    public Server(){}
+    //Todo: Factory?
+    public Server(String serverId, String gameId, String mapId, String flavorId, String socket, boolean joinable, long expiry, String[] players, int playerCount, int maxPlayerCount, boolean lobby){
+        this.serverId = serverId;
+        this.gameId = gameId;
+        this.mapId = mapId;
+        this.flavorId = flavorId;
+        this.socket = socket;
+        this.joinable = joinable;
+        this.expiry = expiry;
+        this.players = players;
+        this.playerCount = playerCount;
+        this.maxPlayerCount = maxPlayerCount;
+        this.lobby = lobby;
+    }
+    public String getServerId() {
+        return serverId;
+    }
+
+    public String getGameId() {
+        return gameId;
+    }
+
+    public String getSocket() {
+        return socket;
+    }
+
+    public boolean isJoinable() {
+        return joinable;
+    }
+
+    public String getMapId() {
+        return mapId;
+    }
+
+    public String getFlavorId() {
+        return flavorId;
+    }
+
+    public long getExpiry() {
+        return expiry;
+    }
+
+    public String[] getPlayers() {
+        return players;
+    }
+
+    public int getPlayerCount() {
+        return playerCount;
+    }
+
+    public int getMaxPlayerCount() {
+        return maxPlayerCount;
+    }
+
+    public boolean isLobby() {
+        return lobby;
+    }
 }

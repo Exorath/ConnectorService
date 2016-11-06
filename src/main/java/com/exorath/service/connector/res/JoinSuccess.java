@@ -24,11 +24,13 @@ import com.google.gson.annotations.SerializedName;
 public class JoinSuccess extends Success {
     @SerializedName("sid")
     private String serverId;
-    public JoinSuccess(String serverId, boolean success){
+
+    public JoinSuccess(boolean success, String serverId) {
         super(success);
         this.serverId = serverId;
     }
-    public JoinSuccess(String serverId, boolean success, String err){
+
+    public JoinSuccess(boolean success, String serverId, String err) {
         super(success, err);
         this.serverId = serverId;
     }

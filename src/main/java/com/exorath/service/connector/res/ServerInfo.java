@@ -23,11 +23,45 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ServerInfo {
     @SerializedName("pc")
-    private int playerCount;
+    private Integer playerCount;
     @SerializedName("sc")
-    private int serverCount;
+    private Integer serverCount;
     @SerializedName("osc")
-    private int openServerCount;
+    private Integer openServerCount;
     @SerializedName("opc")
-    private int openSlotCount;
+    private Integer openSlotCount;
+    @SerializedName("lastUpdate")
+    private Long lastUpdate;
+
+    public ServerInfo(Integer playerCount, Integer serverCount, Integer openServerCount, Integer openSlotCount, Long lastUpdate) {
+        this.playerCount = playerCount;
+        this.serverCount = serverCount;
+        this.openServerCount = openServerCount;
+        this.openSlotCount = openSlotCount;
+        this.lastUpdate = lastUpdate;
+    }
+
+    public Integer getPlayerCount() {
+        return playerCount;
+    }
+
+    public Integer getServerCount() {
+        return serverCount;
+    }
+
+    public Integer getOpenServerCount() {
+        return openServerCount;
+    }
+
+    public Integer getOpenSlotCount() {
+        return openSlotCount;
+    }
+
+    public Long getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setOpenSlotCount(Integer openSlotCount) {
+        this.openSlotCount = openSlotCount;
+    }
 }
