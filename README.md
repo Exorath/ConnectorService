@@ -3,7 +3,7 @@ Quickly allows servers to send players to games based on the game type, map and 
 
 ##Endpoints
 
-###/servers/info/{gameId}?flavorId=teams&minLastUpdate=12342352343 [GET]:
+###/servers/info/{gameId}?flavorId=teams [GET]:
 ####Gets general information about the running servers of the specified game type
 If the information is too outdated, this query will go over all online servers in the database to refetch the data.
 
@@ -11,7 +11,7 @@ If the information is too outdated, this query will go over all online servers i
 - gameId (string) [OPTIONAL]: Filter on gameId
 - mapId (string)[OPTIONAL]: Filter  on mapId
 - flavorId (string)[OPTIONAL]: Filter on flavorId
-- minLastUpdate (num)[OPTIONAL]: Requires the data to be at least younger then this time (in UNIX millis), if the current DB data is older, data will be re-fetched. Defaults to 0.
+- minLastUpdate (num)[OPTIONAL]: Requires the data to be at least younger then this time (in UNIX millis), if the current DB data is older, data will be re-fetched. NOT USED FOR NOW.
 
 **Response**: 
 ```json
