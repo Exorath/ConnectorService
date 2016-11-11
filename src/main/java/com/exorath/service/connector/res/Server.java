@@ -17,37 +17,43 @@
 package com.exorath.service.connector.res;
 
 import com.google.gson.annotations.SerializedName;
+import org.mongodb.morphia.annotations.*;
+
 
 /**
+ * Lobby is defined as a flavor!
  * Created by toonsev on 11/3/2016.
  */
+@Entity
+@Indexes({
+        @Index(fields = @Field(value = "mapId")),
+        @Index(fields = @Field(value = "gameId")),
+        @Index(fields = @Field(value = "gameId"))
+})
 public class Server {
-    @SerializedName("serverId")
+    @Id
     private String serverId;
-    @SerializedName("gameId")
+    @Indexed
     private String gameId;
-    @SerializedName("socket")
-    private String socket;
-    @SerializedName("joinable")
-    private boolean joinable;
-    @SerializedName("mapId")
+    @Indexed
     private String mapId = null;
-    @SerializedName("flavorId")
+    @Indexed
     private String flavorId = null;
-    @SerializedName("expiry")
+    private String socket;
+    private boolean joinable;
+    @Indexed
     private long expiry;
-    @SerializedName("players")
     private String[] players;
+    @Property("pc")
     @SerializedName("pc")
     private int playerCount;
+    @Property("mpc")
     @SerializedName("mpc")
     private int maxPlayerCount = -1;
-    @SerializedName("lobby")
-    private boolean lobby = false;
 
     public Server(){}
     //Todo: Factory?
-    public Server(String serverId, String gameId, String mapId, String flavorId, String socket, boolean joinable, long expiry, String[] players, int playerCount, int maxPlayerCount, boolean lobby){
+    public Server(String serverId, String gameId, String mapId, String flavorId, String socket, boolean joinable, long expiry, String[] players, int playerCount, int maxPlayerCount){
         this.serverId = serverId;
         this.gameId = gameId;
         this.mapId = mapId;
@@ -58,7 +64,6 @@ public class Server {
         this.players = players;
         this.playerCount = playerCount;
         this.maxPlayerCount = maxPlayerCount;
-        this.lobby = lobby;
     }
     public String getServerId() {
         return serverId;
@@ -100,7 +105,4 @@ public class Server {
         return maxPlayerCount;
     }
 
-    public boolean isLobby() {
-        return lobby;
-    }
 }

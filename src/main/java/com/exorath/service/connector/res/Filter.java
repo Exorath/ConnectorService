@@ -28,8 +28,6 @@ public class Filter {
     private String mapId;
     @SerializedName("f")
     private String flavorId;
-    @SerializedName("l")
-    private Boolean lobby;
 
     public Filter withGameId(String gameId){
         this.gameId = gameId;
@@ -47,11 +45,6 @@ public class Filter {
         return this;
     }
 
-    public Filter withIsLobby(boolean lobby){
-        this.lobby = lobby;
-        return this;
-    }
-
     public String getFlavorId() {
         return flavorId;
     }
@@ -62,13 +55,5 @@ public class Filter {
 
     public String getMapId() {
         return mapId;
-    }
-
-    public Boolean isLobby() {
-        return lobby;
-    }
-
-    public void setLobby(Boolean lobby) {
-        this.lobby = lobby;
     }
 }

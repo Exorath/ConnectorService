@@ -16,24 +16,22 @@
 
 package com.exorath.service.connector.service;
 
-import com.exorath.service.connector.res.Filter;
-import com.exorath.service.connector.res.Server;
-import com.exorath.service.connector.res.ServerInfo;
-import com.exorath.service.connector.res.Success;
+import org.junit.Test;
 
 /**
- * Created by toonsev on 11/5/2016.
+ * Created by toonsev on 11/10/2016.
  */
-public interface DatabaseProvider {
-    //Server info stuff
-    ServerInfo getServerInfo(Filter filterId, Long minLastUpdate);
-
-    //Server specific stuff
-
-    Success putServer(Server server);
-
-    Server getJoinableServer(Filter filter, String uuid);
-
-
-
+public class Bla extends MongoTest {
+    @Test
+    public void test(){
+        getMongo();
+    }
+    @Test
+    public void test2(){
+        getMongo();
+    }
+    @Test
+    public void test3(){
+        getMongo();
+    }
 }

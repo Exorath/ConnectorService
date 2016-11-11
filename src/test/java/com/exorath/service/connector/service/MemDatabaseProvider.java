@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.exorath.service.connector;
+package com.exorath.service.connector.service;
 
 import com.exorath.service.connector.res.Filter;
 import com.exorath.service.connector.res.Server;
@@ -33,23 +33,29 @@ public class MemDatabaseProvider implements DatabaseProvider {
     private HashMap<String, ServerInfo> infoByFilter = new HashMap<>();
     private HashMap<String, Server> serversByUuid = new HashMap<>();
 
-    public ServerInfo getServerInfo(String filterId) {
-        return infoByFilter.get(filterId);
+    public ServerInfo getServerInfo(Filter filter, Long minLastUpdate) {
+        int players = 0;
+        int servers = 0;
+        int openServers = 0;
+        int openSlots = 0;
+        for (Server server : getServersWithFilter(filter)) {
+            servers++;
+            if(server.isJoinable()){
+                openServers++;
+                openSlots += (server.getMaxPlayerCount() - server.getPlayerCount());
+            }
+            players += server.getPlayerCount();
+        }
+        return new ServerInfo(players, servers, openServers, openSlots, System.currentTimeMillis());
     }
 
-    public HashMap<String, ServerInfo> getInfoByFilter() {
-        return infoByFilter;
-    }
 
     public HashMap<String, Server> getServersByUuid() {
         return serversByUuid;
     }
 
-    public void updateServerInfo(String filterId, ServerInfo serverInfo) {
-        infoByFilter.put(filterId, serverInfo);
-    }
 
-    public Iterable<Server> getServersWithFilter(Filter filter) {
+    private Iterable<Server> getServersWithFilter(Filter filter) {
         HashSet<Server> servers = new HashSet<>();
         for (Server server : serversByUuid.values())
             if (getServer(server, filter, false))
@@ -62,7 +68,7 @@ public class MemDatabaseProvider implements DatabaseProvider {
         return new Success(true);
     }
 
-    public Server getJoinableServer(Filter filter) {
+    public Server getJoinableServer(Filter filter, String uuid) {
         for (Server server : serversByUuid.values()) {
             if (!getServer(server, filter, true))
                 continue;
@@ -73,8 +79,6 @@ public class MemDatabaseProvider implements DatabaseProvider {
 
     private boolean getServer(Server server, Filter filter, boolean mustBeJoinable) {
         if (mustBeJoinable && !server.isJoinable())
-            return false;
-        if (filter.isLobby() != null && server.isLobby() != filter.isLobby())
             return false;
         if (server.getExpiry() <= System.currentTimeMillis())
             return false;
