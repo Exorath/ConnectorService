@@ -24,7 +24,9 @@ import com.exorath.service.connector.res.ServerInfo;
 import com.exorath.service.connector.res.Success;
 import com.mongodb.*;
 import com.mongodb.client.model.BsonField;
+import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ValidationOptions;
 import org.bson.BSON;
 import org.bson.BsonValue;
 import org.bson.Document;
@@ -58,6 +60,12 @@ public class MongoDatabaseProvider implements DatabaseProvider {
         morphia.map(Server.class);
         datastore = (AdvancedDatastore) morphia.createDatastore(client, databaseName);
         this.collectionName = collectionName;
+        try {
+            client.getDatabase(databaseName).createCollection(collectionName);
+        }catch (MongoCommandException e){
+            if(e.getErrorCode() != 48)
+                throw e;
+        }
     }
 
     public MongoDatabaseProvider(MongoProvider provider, TableNameProvider databaseNameProvider, TableNameProvider collectionNameProvider) {
@@ -90,6 +98,10 @@ public class MongoDatabaseProvider implements DatabaseProvider {
                         "return ret;" +
                         "}", null, MapReduceCommand.OutputType.INLINE, builder.get());
         MapReduceOutput results = datastore.getDB().getCollection(collectionName).mapReduce(mapReduceCommand);
+        if(results.getOutputCount() == 0)
+            return new ServerInfo(0, 0, 0, 0, System.currentTimeMillis());
+        if(results.getOutputCount() > 1)
+            throw new IllegalStateException("mapReduce returned multiple results.");
         for (DBObject res : results.results()) {
             DBObject val = (DBObject) res.get("value");
             return new ServerInfo(((Double) val.get("pc")).intValue(),

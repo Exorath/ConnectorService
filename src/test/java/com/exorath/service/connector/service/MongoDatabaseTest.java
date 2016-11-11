@@ -191,6 +191,101 @@ public class MongoDatabaseTest {
         assertFalse(result.isSuccess());
     }
 
+    @Test
+    public void joinServerWithFilterDefaultFalseSuccessTest() throws Exception{
+        String gameId = "ThisIsAspecificGameId";
+        String flavorId = "ThisIsAspecificFlavorId";
+
+        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
+        assertFalse(success.isSuccess());
+    }
+    @Test
+    public void joinServerWithOneGoodServerTest() throws Exception{
+        service.updateServer(new Server("id1", "gid", "map1", "fid", "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
+        JoinSuccess success = service.joinServer("uuid1", new Filter());
+        assertTrue(success.isSuccess());
+        assertEquals("id1", success.getServerId());
+    }
+    @Test
+    public void joinServerWithOneGoodServerAndFilterTest() throws Exception{
+        String gameId = "ThisIsAspecificGameId";
+        String flavorId = "ThisIsAspecificFlavorId";
+        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
+        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
+        assertTrue(success.isSuccess());
+        assertEquals("id1", success.getServerId());
+    }
+    @Test
+    public void joinServerWithOneGoodOneBadServerAndFilterTest() throws Exception{
+        String gameId = "ThisIsAspecificGameId";
+        String flavorId = "ThisIsAspecificFlavorId";
+        service.updateServer(new Server("id0", "wrongGameId", "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
+        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
+        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
+        assertTrue(success.isSuccess());
+        assertEquals("id1", success.getServerId());
+    }
+    @Test
+    public void joinServerWithOneGoodOutdatedOneBadServerAndFilterTest() throws Exception{
+        String gameId = "ThisIsAspecificGameId";
+        String flavorId = "ThisIsAspecificFlavorId";
+        service.updateServer(new Server("id0", "wrongGameId", "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
+        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 500, getPlayers(3), 3, 12));
+        Thread.sleep(1000);
+        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
+        assertFalse(success.isSuccess());
+    }
+    @Test
+    public void joinServerWithOneNotJoinableAndBadServerAndFilterTest() throws Exception{
+        String gameId = "ThisIsAspecificGameId";
+        String flavorId = "ThisIsAspecificFlavorId";
+        service.updateServer(new Server("id0", "wrongGameId", "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
+        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", false, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
+        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
+        assertFalse(success.isSuccess());
+    }
+    @Test
+    public void joinServerWithOneFillAndBadServerAndFilterTest() throws Exception{
+        String gameId = "ThisIsAspecificGameId";
+        String flavorId = "ThisIsAspecificFlavorId";
+        service.updateServer(new Server("id0", "wrongGameId", "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
+        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(12), 12, 12));
+        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
+        assertFalse(success.isSuccess());
+    }
+    @Test
+    public void joinServerWithoodAndOneBadAndFilterPicksBestTest() throws Exception{
+        String gameId = "ThisIsAspecificGameId";
+        String flavorId = "ThisIsAspecificFlavorId";
+        service.updateServer(new Server("id0", "wrongGameId", "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
+        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
+        service.updateServer(new Server("id2", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
+        service.updateServer(new Server("id3", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
+        service.updateServer(new Server("id4", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(4), 4, 12));
+        service.updateServer(new Server("id5", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
+        service.updateServer(new Server("id6", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
+        service.updateServer(new Server("id7", gameId, "map1", flavorId, "dns.com:25565", false, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
+        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
+        assertTrue(success.isSuccess());
+        assertEquals("id4", success.getServerId());
+    }
+    @Test
+    public void joinServerWithoodAndBadAndFilterPicksBestTest() throws Exception{
+        String gameId = "ThisIsAspecificGameId";
+        String flavorId = "ThisIsAspecificFlavorId";
+        service.updateServer(new Server("id0", "wrongGameId", "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
+        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", false, System.currentTimeMillis() + 5000, getPlayers(4), 4, 12));
+        service.updateServer(new Server("id2", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
+        service.updateServer(new Server("id3", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
+        service.updateServer(new Server("id4", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 500, getPlayers(3), 3, 12));
+        service.updateServer(new Server("id5", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(1), 1, 12));
+        service.updateServer(new Server("id6", gameId, "map1", flavorId, "dns.com:25565", false, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
+        service.updateServer(new Server("id7", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
+        Thread.sleep(1000);
+        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
+        assertTrue(success.isSuccess());
+        assertEquals("id7", success.getServerId());
+    }
     //putServerTest
     @Test
     public void updateServerUpdatesDBTest() {
@@ -366,105 +461,12 @@ public class MongoDatabaseTest {
         assertEquals(2, info.getOpenServerCount().intValue());
     }
     @Test
-    public void joinServerDefaultFalseSuccessTest() throws Exception{
-        JoinSuccess success = service.joinServer("uuid1", new Filter());
-        assertFalse(success.isSuccess());
-    }
-
-    @Test
-    public void joinServerWithFilterDefaultFalseSuccessTest() throws Exception{
-        String gameId = "ThisIsAspecificGameId";
-        String flavorId = "ThisIsAspecificFlavorId";
-
-        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
-        assertFalse(success.isSuccess());
-    }
-    @Test
-    public void joinServerWithOneGoodServerTest() throws Exception{
-        service.updateServer(new Server("id1", "gid", "map1", "fid", "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
-        JoinSuccess success = service.joinServer("uuid1", new Filter());
-        assertTrue(success.isSuccess());
-        assertEquals("id1", success.getServerId());
-    }
-    @Test
-    public void joinServerWithOneGoodServerAndFilterTest() throws Exception{
-        String gameId = "ThisIsAspecificGameId";
-        String flavorId = "ThisIsAspecificFlavorId";
-        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
-        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
-        assertTrue(success.isSuccess());
-        assertEquals("id1", success.getServerId());
-    }
-    @Test
-    public void joinServerWithOneGoodOneBadServerAndFilterTest() throws Exception{
-        String gameId = "ThisIsAspecificGameId";
-        String flavorId = "ThisIsAspecificFlavorId";
-        service.updateServer(new Server("id0", "wrongGameId", "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
-        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
-        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
-        assertTrue(success.isSuccess());
-        assertEquals("id1", success.getServerId());
-    }
-    @Test
-    public void joinServerWithOneGoodOutdatedOneBadServerAndFilterTest() throws Exception{
-        String gameId = "ThisIsAspecificGameId";
-        String flavorId = "ThisIsAspecificFlavorId";
-        service.updateServer(new Server("id0", "wrongGameId", "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
-        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 500, getPlayers(3), 3, 12));
-        Thread.sleep(1000);
-        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
-        assertFalse(success.isSuccess());
-    }
-    @Test
-    public void joinServerWithOneNotJoinableAndBadServerAndFilterTest() throws Exception{
-        String gameId = "ThisIsAspecificGameId";
-        String flavorId = "ThisIsAspecificFlavorId";
-        service.updateServer(new Server("id0", "wrongGameId", "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
-        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", false, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
-        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
-        assertFalse(success.isSuccess());
-    }
-    @Test
-    public void joinServerWithOneFillAndBadServerAndFilterTest() throws Exception{
-        String gameId = "ThisIsAspecificGameId";
-        String flavorId = "ThisIsAspecificFlavorId";
-        service.updateServer(new Server("id0", "wrongGameId", "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
-        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(12), 12, 12));
-        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
-        assertFalse(success.isSuccess());
-    }
-    @Test
-    public void joinServerWithoodAndOneBadAndFilterPicksBestTest() throws Exception{
-        String gameId = "ThisIsAspecificGameId";
-        String flavorId = "ThisIsAspecificFlavorId";
-        service.updateServer(new Server("id0", "wrongGameId", "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
-        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
-        service.updateServer(new Server("id2", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
-        service.updateServer(new Server("id3", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
-        service.updateServer(new Server("id4", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(4), 4, 12));
-        service.updateServer(new Server("id5", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
-        service.updateServer(new Server("id6", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
-        service.updateServer(new Server("id7", gameId, "map1", flavorId, "dns.com:25565", false, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
-        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
-        assertTrue(success.isSuccess());
-        assertEquals("id4", success.getServerId());
-    }
-    @Test
-    public void joinServerWithoodAndBadAndFilterPicksBestTest() throws Exception{
-        String gameId = "ThisIsAspecificGameId";
-        String flavorId = "ThisIsAspecificFlavorId";
-        service.updateServer(new Server("id0", "wrongGameId", "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
-        service.updateServer(new Server("id1", gameId, "map1", flavorId, "dns.com:25565", false, System.currentTimeMillis() + 5000, getPlayers(4), 4, 12));
-        service.updateServer(new Server("id2", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
-        service.updateServer(new Server("id3", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
-        service.updateServer(new Server("id4", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 500, getPlayers(3), 3, 12));
-        service.updateServer(new Server("id5", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(1), 1, 12));
-        service.updateServer(new Server("id6", gameId, "map1", flavorId, "dns.com:25565", false, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
-        service.updateServer(new Server("id7", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(3), 3, 12));
-        Thread.sleep(1000);
-        JoinSuccess success = service.joinServer("uuid1", new Filter().withGameId(gameId).withFlavorId(flavorId));
-        assertTrue(success.isSuccess());
-        assertEquals("id7", success.getServerId());
+    public void getServerInfoDefaultTest() throws Exception{
+        ServerInfo info = service.getServerInfo(new Filter(), 0l);
+        assertEquals(0, info.getPlayerCount().intValue());
+        assertEquals(0, info.getOpenSlotCount().intValue());
+        assertEquals(0, info.getServerCount().intValue());
+        assertEquals(0, info.getOpenServerCount().intValue());
     }
     private String[] getPlayers(int n) {
         String[] toReturn = new String[n];
