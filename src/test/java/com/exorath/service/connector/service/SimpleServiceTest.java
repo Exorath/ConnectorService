@@ -56,21 +56,21 @@ public class SimpleServiceTest {
     @Test
     public void joinServerReturnsFalseSuccessWithOpenServerBecauseWrongGameIdFilterTest() {
         dbProvider.putServer(new Server("randomSid", "gameId", "mapId", null, "dns.com:25565", true, System.currentTimeMillis() + 5000, new String[0], 0, 12));
-        Success result = service.joinServer("testUuid", new Filter().withGameId("notfound"));
+        Success result = service.joinServer("testUuid", new Filter("notfound"));
         assertFalse(result.isSuccess());
     }
 
     @Test
     public void joinServerReturnsTrueSuccessWithOpenServerBecauseRightGameIdFilterTest() {
         dbProvider.putServer(new Server("randomSid", "foundID", "mapId", null, "dns.com:25565", true, System.currentTimeMillis() + 5000, new String[0], 0, 12));
-        Success result = service.joinServer("testUuid", new Filter().withGameId("foundID"));
+        Success result = service.joinServer("testUuid", new Filter("foundID"));
         assertTrue(result.isSuccess());
     }
 
     @Test
     public void joinServerReturnsFalseSuccessWithOpenServerBecauseWrongMapIdFilterTest() {
         dbProvider.putServer(new Server("randomSid", "gameId", "mapId", null, "dns.com:25565", true, System.currentTimeMillis() + 5000, new String[0], 0, 12));
-        Success result = service.joinServer("testUuid", new Filter().withGameId("notfound"));
+        Success result = service.joinServer("testUuid", new Filter("notfound"));
         assertFalse(result.isSuccess());
     }
 
@@ -84,7 +84,7 @@ public class SimpleServiceTest {
     @Test
     public void joinServerReturnsFalseSuccessWithOpenServerBecauseWrongFlavorIdFilterTest() {
         dbProvider.putServer(new Server("randomSid", "gameId", "mapId", null, "dns.com:25565", true, System.currentTimeMillis() + 5000, new String[0], 0, 12));
-        Success result = service.joinServer("testUuid", new Filter().withGameId("notfound"));
+        Success result = service.joinServer("testUuid", new Filter("notfound"));
         assertFalse(result.isSuccess());
     }
 
@@ -111,7 +111,7 @@ public class SimpleServiceTest {
         dbProvider.putServer(new Server(serverId, gameId, mapId, flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, new String[0], 0, 12));
 
         dbProvider.putServer(new Server("randomSid", "right", "mapId", "flavorId", "dns.com:25565", true, System.currentTimeMillis() + 5000, new String[0], 0, 12));
-        JoinSuccess result = service.joinServer("testUuid", new Filter().withGameId(gameId).withMapId(mapId).withFlavorId(flavorId));
+        JoinSuccess result = service.joinServer("testUuid", new Filter(gameId).withMapId(mapId).withFlavorId(flavorId));
         assertEquals(serverId, result.getServerId());
         assertTrue(result.isSuccess());
     }
@@ -131,7 +131,7 @@ public class SimpleServiceTest {
         dbProvider.putServer(new Server("id8", gameId, null, null, "dns.com:25565", true, System.currentTimeMillis() + 5000, new String[0], 0, 12));
 
         dbProvider.putServer(new Server("randomSid", "right", "mapId", "flavorId", "dns.com:25565", true, System.currentTimeMillis() + 5000, new String[0], 0, 12));
-        JoinSuccess result = service.joinServer("testUuid", new Filter().withGameId(gameId).withMapId(mapId).withFlavorId(flavorId));
+        JoinSuccess result = service.joinServer("testUuid", new Filter(gameId).withMapId(mapId).withFlavorId(flavorId));
         assertNull(result.getServerId());
         assertFalse(result.isSuccess());
     }
@@ -165,7 +165,7 @@ public class SimpleServiceTest {
         dbProvider.putServer(new Server("id1", gameId, "randMap", null, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
         dbProvider.putServer(new Server("id2", "gameId1", "TheMap", "flavorId1", "dns.com:25566", true, System.currentTimeMillis() + 5000, getPlayers(12), 5, 12));
         dbProvider.putServer(new Server("id3", gameId, "wrongmapId", "flavorId2", "dns.com:25567", false, System.currentTimeMillis() + 5000, getPlayers(12), 12, 12));
-        ServerInfo info = service.getServerInfo(new Filter().withGameId(gameId), 0l);
+        ServerInfo info = service.getServerInfo(new Filter(gameId), 0l);
         assertEquals(2, info.getOpenServerCount().intValue());
         assertEquals(3, info.getServerCount().intValue());
         assertEquals(21, info.getOpenSlotCount().intValue());
@@ -180,7 +180,7 @@ public class SimpleServiceTest {
         dbProvider.putServer(new Server("id1", gameId, "randMap", null, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
         dbProvider.putServer(new Server("id2", "gameId1", "TheMap", "flavorId1", "dns.com:25566", true, System.currentTimeMillis() + 5000, getPlayers(12), 5, 12));
         dbProvider.putServer(new Server("id3", gameId, mapId, "flavorId2", "dns.com:25567", false, System.currentTimeMillis() + 5000, getPlayers(12), 12, 12));
-        ServerInfo info = service.getServerInfo(new Filter().withGameId(gameId).withMapId(mapId), 0l);
+        ServerInfo info = service.getServerInfo(new Filter(gameId).withMapId(mapId), 0l);
         assertEquals(1, info.getOpenServerCount().intValue());
         assertEquals(2, info.getServerCount().intValue());
         assertEquals(11, info.getOpenSlotCount().intValue());
@@ -196,7 +196,7 @@ public class SimpleServiceTest {
         dbProvider.putServer(new Server("id1", gameId, "randMap", null, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
         dbProvider.putServer(new Server("id2", "gameId1", "TheMap", flavorId, "dns.com:25566", true, System.currentTimeMillis() + 5000, getPlayers(12), 5, 12));
         dbProvider.putServer(new Server("id3", gameId, mapId, flavorId, "dns.com:25567", false, System.currentTimeMillis() + 5000, getPlayers(12), 12, 12));
-        ServerInfo info = service.getServerInfo(new Filter().withGameId(gameId).withMapId(mapId).withFlavorId(flavorId), 0l);
+        ServerInfo info = service.getServerInfo(new Filter(gameId).withMapId(mapId).withFlavorId(flavorId), 0l);
         assertEquals(1, info.getOpenServerCount().intValue());
         assertEquals(2, info.getServerCount().intValue());
         assertEquals(11, info.getOpenSlotCount().intValue());
@@ -211,7 +211,7 @@ public class SimpleServiceTest {
         dbProvider.putServer(new Server("id1", gameId, "randMap", null, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(2), 2, 12));
         dbProvider.putServer(new Server("id2", "gameId1", "TheMap", flavorId, "dns.com:25566", true, System.currentTimeMillis() + 5000, getPlayers(12), 5, 12));
         dbProvider.putServer(new Server("id3", gameId, "map2", flavorId, "dns.com:25567", false, System.currentTimeMillis() + 5000, getPlayers(12), 12, 12));
-        ServerInfo info = service.getServerInfo(new Filter().withGameId(gameId).withFlavorId(flavorId), 0l);
+        ServerInfo info = service.getServerInfo(new Filter(gameId).withFlavorId(flavorId), 0l);
         assertEquals(1, info.getOpenServerCount().intValue());
         assertEquals(2, info.getServerCount().intValue());
         assertEquals(11, info.getOpenSlotCount().intValue());
@@ -232,7 +232,7 @@ public class SimpleServiceTest {
         dbProvider.putServer(new Server("id7", gameId, "map2", flavorId, "dns.com:25561", false, System.currentTimeMillis() - 5000, getPlayers(12), 12, 12));
         dbProvider.putServer(new Server("id8", gameId, "map2", flavorId, "dns.com:25562", false, System.currentTimeMillis() - 5000, getPlayers(12), 12, 12));
         dbProvider.putServer(new Server("id9", gameId, "map2", flavorId, "dns.com:25563", false, System.currentTimeMillis() - 5000, getPlayers(12), 12, 12));
-        ServerInfo info = service.getServerInfo(new Filter().withGameId(gameId).withFlavorId(flavorId), 0l);
+        ServerInfo info = service.getServerInfo(new Filter(gameId).withFlavorId(flavorId), 0l);
         assertEquals(1, info.getOpenServerCount().intValue());
         assertEquals(2, info.getServerCount().intValue());
         assertEquals(11, info.getOpenSlotCount().intValue());
@@ -243,10 +243,10 @@ public class SimpleServiceTest {
         String gameId = "ThisIsAspecificGameId";
         String flavorId = "ThisIsAspecificFlavorId";
         dbProvider.putServer(new Server("id0", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(1), 1, 12));
-        service.getServerInfo(new Filter().withGameId(gameId).withFlavorId(flavorId), 0l);
+        service.getServerInfo(new Filter(gameId).withFlavorId(flavorId), 0l);
         dbProvider.putServer(new Server("id0", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 5000, getPlayers(5), 5, 12));
         Thread.sleep(1000);
-        ServerInfo info = service.getServerInfo(new Filter().withGameId(gameId).withFlavorId(flavorId), System.currentTimeMillis() - 500);
+        ServerInfo info = service.getServerInfo(new Filter(gameId).withFlavorId(flavorId), System.currentTimeMillis() - 500);
         assertEquals(5, info.getPlayerCount().intValue());
     }
 
@@ -256,7 +256,7 @@ public class SimpleServiceTest {
         String flavorId = "ThisIsAspecificFlavorId";
         dbProvider.putServer(new Server("id0", gameId, "map1", flavorId, "dns.com:25565", true, System.currentTimeMillis() + 1000, getPlayers(1), 1, 12));
         Thread.sleep(1100);
-        ServerInfo info = service.getServerInfo(new Filter().withGameId(gameId).withFlavorId(flavorId), 0l);
+        ServerInfo info = service.getServerInfo(new Filter(gameId).withFlavorId(flavorId), 0l);
         assertEquals(0, info.getPlayerCount().intValue());
     }
     private String[] getPlayers(int n) {

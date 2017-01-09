@@ -29,6 +29,12 @@ public class Filter {
     @SerializedName("f")
     private String flavorId;
 
+    @Deprecated
+    public Filter() {}
+
+    public Filter(String gameId){
+        this.gameId = gameId;
+    }
     public Filter withGameId(String gameId){
         this.gameId = gameId;
         return this;

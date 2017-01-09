@@ -3,7 +3,7 @@ Quickly allows servers to send players to games based on the game type, map and 
 
 ##Endpoints
 
-###/servers/info/{gameId}?flavorId=teams [GET]:
+###/info?gameId=asd&flavorId=teams [GET]:
 ####Gets general information about the running servers of the specified game type
 If the information is too outdated, this query will go over all online servers in the database to refetch the data.
 
@@ -53,11 +53,12 @@ An empty response will be given when there's no info yet.
 - success (boolean): Whether or not the record was updated successfully 
 - err (string)[OPTIONAL]: Error message only responded when the update was not successful.
 
-###/servers/{gameId}/player/{uuid} [POST]:
+###/join/{uuid} [PUT]:
 ####Makes the player join an open instance of the game.
 If lobby=*true*, the last game of this player will be updated to the provided gameId.
 
 **body**:
+The body acts as a filter for the join
 ```json
 {"lobby": true, "mapId": "treeLand", "flavorId": "teams"}
 ```
