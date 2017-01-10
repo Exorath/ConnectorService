@@ -22,7 +22,7 @@
 
     <groupId>com.exorath</groupId>
     <artifactId>ConnectorService</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
     <build>
         <plugins>
             <plugin>
