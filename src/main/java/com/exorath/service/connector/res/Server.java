@@ -65,6 +65,11 @@ public class Server {
         this.playerCount = playerCount;
         this.maxPlayerCount = maxPlayerCount;
     }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
+    }
+
     public String getServerId() {
         return serverId;
     }

@@ -29,7 +29,6 @@ public class Filter {
     @SerializedName("f")
     private String flavorId;
 
-    @Deprecated
     public Filter() {}
 
     public Filter(String gameId){

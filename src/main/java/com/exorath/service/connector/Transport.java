@@ -17,14 +17,54 @@
 package com.exorath.service.connector;
 
 import com.exorath.service.commons.portProvider.PortProvider;
+import com.exorath.service.connector.res.Filter;
+import com.exorath.service.connector.res.Server;
+import com.google.gson.Gson;
+import spark.Route;
 
+import static spark.Spark.get;
 import static spark.Spark.port;
+import static spark.Spark.put;
 
 /**
  * Created by toonsev on 11/3/2016.
  */
 public class Transport {
+    private static final Gson GSON = new Gson();
     public static void setup(Service service, PortProvider portProvider) {
         port(portProvider.getPort());
+
+        get("/info", getGetServerInfoRoute(service), GSON::toJson);
+        put("/servers/{serverId}", getPutServerRoute(service), GSON::toJson);
+        put("/join/{uuid}", getJoinServerRoute(service), GSON::toJson);
+    }
+
+    public static Route getGetServerInfoRoute(Service service){
+        return (req, res) -> {
+            Filter filter = new Filter()
+                    .withGameId(req.queryParams("gameId"))
+                    .withFlavorId(req.queryParams("flavorId"))
+                    .withMapId(req.queryParams("mapId"));
+            Long minLastUpdate = null;
+            try {
+                minLastUpdate = Long.valueOf(req.queryParams("minLastUpdate"));
+            }catch (Exception e){}
+            return service.getServerInfo(filter, minLastUpdate);
+        };
+    }
+
+    public static Route getPutServerRoute(Service service){
+        return (req, res) -> {
+            Server server = GSON.fromJson(req.body(), Server.class);
+            server.setGameId(req.params("serverId"));
+            return service.updateServer(server);
+        };
+    }
+    public static Route getJoinServerRoute(Service service){
+        return (req, res) -> {
+            String uuid = req.params("uuid");
+            Filter filter = GSON.fromJson(req.body(), Filter.class);
+            return service.joinServer(uuid, filter);
+        };
     }
 }
