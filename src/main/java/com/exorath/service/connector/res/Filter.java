@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Exorath
+ * Copyright 2017 Exorath
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -60,5 +60,26 @@ public class Filter {
 
     public String getMapId() {
         return mapId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Filter filter = (Filter) o;
+
+        if (gameId != null ? !gameId.equals(filter.gameId) : filter.gameId != null) return false;
+        if (mapId != null ? !mapId.equals(filter.mapId) : filter.mapId != null) return false;
+        return flavorId != null ? flavorId.equals(filter.flavorId) : filter.flavorId == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = gameId != null ? gameId.hashCode() : 0;
+        result = 31 * result + (mapId != null ? mapId.hashCode() : 0);
+        result = 31 * result + (flavorId != null ? flavorId.hashCode() : 0);
+        return result;
     }
 }
