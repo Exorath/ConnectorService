@@ -26,9 +26,10 @@ import java.util.HashMap;
 /**
  * Created by toonsev on 1/11/2017.
  */
-public class CachedConnectorServiceAPI extends ConnectorServiceAPI{
+public class CachedConnectorServiceAPI extends ConnectorServiceAPI {
     private HashMap<Filter, ServerInfo> serverInfoByFilter = new HashMap<>();
-    public CachedConnectorServiceAPI(String address){
+
+    public CachedConnectorServiceAPI(String address) {
         super(address);
     }
 
@@ -38,9 +39,10 @@ public class CachedConnectorServiceAPI extends ConnectorServiceAPI{
     @Override
     public ServerInfo getServerInfo(Filter filter, Long minLastUpdate) {
         ServerInfo serverInfo = serverInfoByFilter.get(filter);
-        if(serverInfo.getLastUpdate() == null || serverInfo.getLastUpdate() < minLastUpdate) {
+        if (serverInfo == null || serverInfo.getLastUpdate() == null || serverInfo.getLastUpdate() < minLastUpdate) {
             serverInfo = super.getServerInfo(filter, minLastUpdate);
-            serverInfoByFilter.put(filter, serverInfo);
+            if (serverInfo != null)
+                serverInfoByFilter.put(filter, serverInfo);
         }
         return serverInfo;
     }
