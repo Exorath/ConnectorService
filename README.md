@@ -76,3 +76,8 @@ The body acts as a filter for the join
 - success (boolean): Whether or not the player will be teleported to a server.
 - sid (string)[OPTIONAL]: The uniqueId of the server the player is connecting to.
 - err (string)[OPTIONAL]: An error string that describes why the player was not connected to the server Only provided when success=*false*.
+
+##Environment
+| Name | Value |
+| --------- | --- |
+| MONGO_URI | {mongo_uri} |
