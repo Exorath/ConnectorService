@@ -1,4 +1,4 @@
-# ConnectorService
+# ConnectorService [![Build Status](https://travis-ci.org/Exorath/ConnectorService.svg?branch=master)](https://travis-ci.org/Exorath/ConnectorService)
 Quickly allows servers to send players to games based on the game type, map and flavor.
 
 ##Endpoints
