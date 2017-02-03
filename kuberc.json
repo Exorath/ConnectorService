@@ -1,0 +1,48 @@
+{
+  "kind": "ReplicationController",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "mapservice-controller",
+    "namespace": "services",
+    "labels": {
+      "state": "serving"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "app": "connectorservice"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "connectorservice"
+        }
+      },
+      "spec": {
+        "volumes": null,
+        "containers": [
+          {
+            "name": "connectorservice",
+            "image": "exorath/connectorservice",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ],
+             "env": [
+              {
+                "name": "PORT",
+                "value": "8080"
+              }
+          ],
+            "imagePullPolicy": "IfNotPresent"
+          }
+        ],
+        "restartPolicy": "Always",
+        "dnsPolicy": "ClusterFirst"
+      }
+    }
+  }
+}
