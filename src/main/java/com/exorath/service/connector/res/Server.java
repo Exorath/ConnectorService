@@ -30,16 +30,7 @@ import org.mongodb.morphia.annotations.*;
         @Index(fields = @Field(value = "gameId")),
         @Index(fields = @Field(value = "gameId"))
 })
-public class Server {
-    @Id
-    private String serverId;
-    @Indexed
-    private String gameId;
-    @Indexed
-    private String mapId = null;
-    @Indexed
-    private String flavorId = null;
-    private String socket;
+public class Server extends BasicServer {
     private boolean joinable;
     @Indexed
     private long expiry;
@@ -53,12 +44,17 @@ public class Server {
 
     public Server(){}
     //Todo: Factory?
+
     public Server(String serverId, String gameId, String mapId, String flavorId, String socket, boolean joinable, long expiry, String[] players, int playerCount, int maxPlayerCount){
-        this.serverId = serverId;
-        this.gameId = gameId;
-        this.mapId = mapId;
-        this.flavorId = flavorId;
-        this.socket = socket;
+        super(serverId, gameId, mapId, flavorId, socket);
+        this.joinable = joinable;
+        this.expiry = expiry;
+        this.players = players;
+        this.playerCount = playerCount;
+        this.maxPlayerCount = maxPlayerCount;
+    }
+    public Server(BasicServer staticServer, boolean joinable, long expiry, String[] players, int playerCount, int maxPlayerCount){
+        super(staticServer.getServerId(), staticServer.getGameId(), staticServer.getMapId(), staticServer.getFlavorId(), staticServer.getSocket());
         this.joinable = joinable;
         this.expiry = expiry;
         this.players = players;
@@ -66,32 +62,8 @@ public class Server {
         this.maxPlayerCount = maxPlayerCount;
     }
 
-    public void setGameId(String gameId) {
-        this.gameId = gameId;
-    }
-
-    public String getServerId() {
-        return serverId;
-    }
-
-    public String getGameId() {
-        return gameId;
-    }
-
-    public String getSocket() {
-        return socket;
-    }
-
     public boolean isJoinable() {
         return joinable;
-    }
-
-    public String getMapId() {
-        return mapId;
-    }
-
-    public String getFlavorId() {
-        return flavorId;
     }
 
     public long getExpiry() {

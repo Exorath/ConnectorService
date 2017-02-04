@@ -17,8 +17,6 @@
 package com.exorath.service.connector.service;
 
 import com.exorath.service.connector.res.*;
-import com.exorath.service.connector.service.MemDatabaseProvider;
-import com.exorath.service.connector.service.SimpleService;
 import org.junit.Before;
 import org.junit.Test;
 

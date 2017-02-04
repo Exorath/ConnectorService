@@ -17,7 +17,6 @@
 package com.exorath.service.connector.service;
 
 import com.exorath.service.connector.res.*;
-import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import de.flapdoodle.embed.mongo.*;
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;

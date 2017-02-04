@@ -23,19 +23,10 @@ import com.exorath.service.connector.res.Server;
 import com.exorath.service.connector.res.ServerInfo;
 import com.exorath.service.connector.res.Success;
 import com.mongodb.*;
-import com.mongodb.client.model.BsonField;
-import com.mongodb.client.model.CreateCollectionOptions;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.ValidationOptions;
-import org.bson.BSON;
-import org.bson.BsonValue;
 import org.bson.Document;
 import org.mongodb.morphia.*;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
-
-import static com.mongodb.client.model.Filters.gt;
-import static com.mongodb.client.model.Filters.gte;
 
 /**
  * Created by toonsev on 11/8/2016.

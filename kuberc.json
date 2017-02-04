@@ -2,7 +2,7 @@
   "kind": "ReplicationController",
   "apiVersion": "v1",
   "metadata": {
-    "name": "mapservice-controller",
+    "name": "connectorservice-controller",
     "namespace": "services",
     "labels": {
       "state": "serving"
