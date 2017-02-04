@@ -31,12 +31,20 @@
                 "protocol": "TCP"
               }
             ],
-             "env": [
+            "env": [
               {
                 "name": "PORT",
                 "value": "8080"
+              },
+              {
+                "name": "DB_NAME",
+                "value": "ConnectorService"
+              },
+              {
+                "name": "SERVERS_COL_NAME",
+                "value": "Servers"
               }
-          ],
+            ],
             "imagePullPolicy": "IfNotPresent"
           }
         ],

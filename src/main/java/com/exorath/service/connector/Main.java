@@ -31,16 +31,18 @@ import org.slf4j.LoggerFactory;
 public class Main {
     private Service service;
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
-    public Main(){
+
+    public Main() {
         DatabaseProvider databaseProvider = new MongoDatabaseProvider(MongoProvider.getEnvironmentMongoProvider().getClient(),
                 TableNameProvider.getEnvironmentTableNameProvider("DB_NAME").getTableName(),
-                TableNameProvider.getEnvironmentTableNameProvider("COL_NAME").getTableName());
+                TableNameProvider.getEnvironmentTableNameProvider("SERVERS_COL_NAME").getTableName());
         this.service = new SimpleService(databaseProvider);
         LOG.info("Service " + this.service.getClass() + " instantiated");
         Transport.setup(service, PortProvider.getEnvironmentPortProvider());
         LOG.info("HTTP Transport initiated");
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         new Main();
     }
 }
