@@ -16,12 +16,29 @@
 
 package com.exorath.service.connector;
 
+import com.exorath.service.commons.mongoProvider.MongoProvider;
+import com.exorath.service.commons.portProvider.PortProvider;
+import com.exorath.service.commons.tableNameProvider.TableNameProvider;
+import com.exorath.service.connector.service.DatabaseProvider;
+import com.exorath.service.connector.service.MongoDatabaseProvider;
+import com.exorath.service.connector.service.SimpleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by toonsev on 11/3/2016.
  */
 public class Main {
+    private Service service;
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
     public Main(){
-
+        DatabaseProvider databaseProvider = new MongoDatabaseProvider(MongoProvider.getEnvironmentMongoProvider().getClient(),
+                TableNameProvider.getEnvironmentTableNameProvider("DB_NAME").getTableName(),
+                TableNameProvider.getEnvironmentTableNameProvider("COL_NAME").getTableName());
+        this.service = new SimpleService(databaseProvider);
+        LOG.info("Service " + this.service.getClass() + " instantiated");
+        Transport.setup(service, PortProvider.getEnvironmentPortProvider());
+        LOG.info("HTTP Transport initiated");
     }
     public static void main(String[] args){
         new Main();

@@ -81,3 +81,5 @@ The body acts as a filter for the join
 | Name | Value |
 | --------- | --- |
 | MONGO_URI | {mongo_uri} |
+| DB_NAME | {db name to store data} |
+| COL_NAME | col name to store data} |
