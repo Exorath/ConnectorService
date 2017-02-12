@@ -53,8 +53,8 @@ public class Server extends BasicServer {
         this.playerCount = playerCount;
         this.maxPlayerCount = maxPlayerCount;
     }
-    public Server(BasicServer staticServer, boolean joinable, long expiry, String[] players, int playerCount, int maxPlayerCount){
-        super(staticServer.getServerId(), staticServer.getGameId(), staticServer.getMapId(), staticServer.getFlavorId(), staticServer.getSocket());
+    public Server(BasicServer basicServer, boolean joinable, long expiry, String[] players, int playerCount, int maxPlayerCount){
+        super(basicServer.getServerId(), basicServer.getGameId(), basicServer.getMapId(), basicServer.getFlavorId(), basicServer.getSocket());
         this.joinable = joinable;
         this.expiry = expiry;
         this.players = players;
