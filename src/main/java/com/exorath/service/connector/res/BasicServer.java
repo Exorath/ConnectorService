@@ -19,6 +19,10 @@ package com.exorath.service.connector.res;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Indexed;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.UUID;
+
 /**
  * Created by toonsev on 2/4/2017.
  */
@@ -42,6 +46,13 @@ public class BasicServer {
         this.mapId = mapId;
         this.flavorId = flavorId;
         this.socket = socket;
+    }
+
+    public BasicServer(String gameId, String mapId, String flavorId) throws UnknownHostException {
+        this(UUID.randomUUID().toString(), gameId, mapId, flavorId,   InetAddress.getLocalHost().getHostAddress().toString() + ":25565");
+        this.gameId = gameId;
+        this.mapId = mapId;
+        this.flavorId = flavorId;
     }
 
     public void setServerId(String serverId) {
