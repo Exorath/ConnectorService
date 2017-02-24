@@ -40,19 +40,16 @@ public class BasicServer {
 
     public BasicServer() {}
 
+    public BasicServer(String gameId, String mapId, String flavorId) throws UnknownHostException {
+        this(UUID.randomUUID().toString(), gameId, mapId, flavorId, InetAddress.getLocalHost().getHostAddress().toString() + ":25565");
+    }
+
     public BasicServer(String serverId, String gameId, String mapId, String flavorId, String socket) {
         this.serverId = serverId;
         this.gameId = gameId;
         this.mapId = mapId;
         this.flavorId = flavorId;
         this.socket = socket;
-    }
-
-    public BasicServer(String gameId, String mapId, String flavorId) throws UnknownHostException {
-        this(UUID.randomUUID().toString(), gameId, mapId, flavorId,   InetAddress.getLocalHost().getHostAddress().toString() + ":25565");
-        this.gameId = gameId;
-        this.mapId = mapId;
-        this.flavorId = flavorId;
     }
 
     public void setServerId(String serverId) {

@@ -56,7 +56,7 @@ public class Transport {
     public static Route getPutServerRoute(Service service){
         return (req, res) -> {
             Server server = GSON.fromJson(req.body(), Server.class);
-            server.setGameId(req.params("serverId"));
+            server.setServerId(req.params("serverId"));
             return service.updateServer(server);
         };
     }

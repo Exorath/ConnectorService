@@ -81,5 +81,4 @@ public class Server extends BasicServer {
     public int getMaxPlayerCount() {
         return maxPlayerCount;
     }
-
 }
