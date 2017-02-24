@@ -35,8 +35,8 @@ public class Transport {
         port(portProvider.getPort());
 
         get("/info", getGetServerInfoRoute(service), GSON::toJson);
-        put("/servers/{serverId}", getPutServerRoute(service), GSON::toJson);
-        put("/join/{uuid}", getJoinServerRoute(service), GSON::toJson);
+        put("/servers/:serverId", getPutServerRoute(service), GSON::toJson);
+        put("/join/:uuid", getJoinServerRoute(service), GSON::toJson);
     }
 
     public static Route getGetServerInfoRoute(Service service){

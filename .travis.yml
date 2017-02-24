@@ -1,11 +1,15 @@
 language: ruby
-sudo: required
 services:
   - docker
 script:
-  - docker build -t $REPO .
+  - version=${TRAVIS_TAG-latest} ;
+    if [ "$TRAVIS_TAG" == "" ]; then
+    version=latest;
+    fi ;
+    docker build -t $REPO:${version} .;
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+  - if [ -n "$TRAVIS_TAG" ]; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push "$REPO";
+    echo "version $TRAVIS_TAG" ;
+    docker push "$REPO:$TRAVIS_TAG" ;
     fi
