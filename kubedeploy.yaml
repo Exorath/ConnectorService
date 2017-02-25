@@ -9,7 +9,7 @@ spec:
     - port: 8080
   selector:
     app: connectorservice
-  type: LoadBalancer
+  type: ClusterIP
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
