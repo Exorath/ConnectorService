@@ -44,7 +44,6 @@ An empty response will be given when there's no info yet.
 - players (string array): Array of players uuid's
 - pc (int): Amount of players currently on this server
 - mpc (int)[OPTIONAL]: Maximum amount of players allowed on this server, defaults to -1 (no cap)
-- lobby (boolean)[OPTIONAL]: Whether or not this is a lobby. Defaults to false
 
 **Response**: 
 ```json
@@ -76,6 +75,32 @@ The body acts as a filter for the join
 - success (boolean): Whether or not the player will be teleported to a server.
 - sid (string)[OPTIONAL]: The uniqueId of the server the player is connecting to.
 - err (string)[OPTIONAL]: An error string that describes why the player was not connected to the server Only provided when success=*false*.
+
+###/joinable/{uuid} [GET]:
+####Gets a joinable Server
+If lobby=*true*, the last game of this player will be updated to the provided gameId.
+
+
+**Arguments**:
+- uuid (string): The player uuid that will join this server (server status will auto increment with this player online, to reduce full server connects).
+- gameId (string) [OPTIONAL]: Filter on gameId
+- mapId (string)[OPTIONAL]: Filter  on mapId
+- flavorId (string)[OPTIONAL]: Filter on flavorId
+
+**Response**: 
+```json
+{"gameId": "IW", "socket": "IW-s1.dns.com:25565", "joinable": true, "expiry": 1478210318965, "players": ["6939204d-497f-4094-a7da-1a6346aacd9b"], "pc": 1, "mpc": 16}
+```
+- serverId (string): The unique id of this server
+- gameId (string): The gameId of the server instance
+- socket (string): Socket in address:port format
+- joinable (boolean): Whether or not this server can be joined
+- mapId (string)[OPTIONAL]: The mapId of the server instance
+- flavorId (string)[OPTIONAL]: The flavorId of the server instance
+- expiry (long): Time when this server is considered "offline", UNIX millis timestamp.
+- players (string array): Array of players uuid's
+- pc (int): Amount of players currently on this server
+- mpc (int)[OPTIONAL]: Maximum amount of players allowed on this server, defaults to -1 (no cap)
 
 ##Environment
 | Name | Value |

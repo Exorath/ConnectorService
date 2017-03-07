@@ -41,11 +41,13 @@ public interface Service {
     Success updateServer(Server server);
 
     /**
-     * Makes a player join a specific server type.
+     * Makes a player join a specific server type (this will send a request to the actionAPI).
      * The player count of this server will be incremented, all though the player may leave the network before the connection is made (the player count will be slightly faulty)
      * @param uuid the uniqueId of the player to join a game
      * @param filter the filter to find
      * @return the success of this operation (it is not guaranteed that the player was actually send, but a request to do so was) + the server id the player will be connected to
      */
     JoinSuccess joinServer(String uuid, Filter filter);
+
+    Server getJoinableServer(Filter filter, String uuid);
 }

@@ -31,15 +31,27 @@ import static spark.Spark.put;
  */
 public class Transport {
     private static final Gson GSON = new Gson();
+
     public static void setup(Service service, PortProvider portProvider) {
         port(portProvider.getPort());
 
         get("/info", getGetServerInfoRoute(service), GSON::toJson);
+        get("/joinable/:uuid", getGetJoinableServerRoute(service), GSON::toJson);
         put("/servers/:serverId", getPutServerRoute(service), GSON::toJson);
         put("/join/:uuid", getJoinServerRoute(service), GSON::toJson);
     }
 
-    public static Route getGetServerInfoRoute(Service service){
+    private static Route getGetJoinableServerRoute(Service service) {
+        return (req, res) -> {
+            Filter filter = new Filter()
+                    .withGameId(req.queryParams("gameId"))
+                    .withFlavorId(req.queryParams("flavorId"))
+                    .withMapId(req.queryParams("mapId"));
+            return service.joinServer(req.params("uuid"), filter);
+        };
+    }
+
+    public static Route getGetServerInfoRoute(Service service) {
         return (req, res) -> {
             Filter filter = new Filter()
                     .withGameId(req.queryParams("gameId"))
@@ -48,19 +60,21 @@ public class Transport {
             Long minLastUpdate = null;
             try {
                 minLastUpdate = Long.valueOf(req.queryParams("minLastUpdate"));
-            }catch (Exception e){}
+            } catch (Exception e) {
+            }
             return service.getServerInfo(filter, minLastUpdate);
         };
     }
 
-    public static Route getPutServerRoute(Service service){
+    public static Route getPutServerRoute(Service service) {
         return (req, res) -> {
             Server server = GSON.fromJson(req.body(), Server.class);
             server.setServerId(req.params("serverId"));
             return service.updateServer(server);
         };
     }
-    public static Route getJoinServerRoute(Service service){
+
+    public static Route getJoinServerRoute(Service service) {
         return (req, res) -> {
             String uuid = req.params("uuid");
             Filter filter = GSON.fromJson(req.body(), Filter.class);

@@ -55,4 +55,9 @@ public class SimpleService implements Service {
         //TODO: Dispatch join request through ActionAPIProvider
         return new JoinSuccess(true, serverToJoin.getServerId());
     }
+
+    @Override
+    public Server getJoinableServer(Filter filter, String uuid) {
+        return databaseProvider.getJoinableServer(filter, uuid);
+    }
 }
