@@ -46,14 +46,4 @@ public class CachedConnectorServiceAPI extends ConnectorServiceAPI {
         }
         return serverInfo;
     }
-
-    @Override
-    public String joinServer(String uuid, Filter filter) {
-        return super.joinServer(uuid, filter);
-    }
-
-    @Override
-    public boolean putServer(Server server) {
-        return super.putServer(server);
-    }
 }

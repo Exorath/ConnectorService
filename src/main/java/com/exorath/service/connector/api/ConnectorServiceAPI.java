@@ -20,6 +20,7 @@ import com.exorath.service.connector.res.*;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.request.HttpRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
 
 /**
@@ -35,7 +36,7 @@ public class ConnectorServiceAPI {
 
     public ServerInfo getServerInfo(Filter filter, Long minLastUpdate) {
         try {
-            HttpRequestWithBody req = Unirest.put(url("/info"));
+            HttpRequest req = Unirest.get(url("/info"));
             if (filter.getGameId() != null)
                 req.queryString("gameId", filter.getGameId());
             if (filter.getMapId() != null)
@@ -83,6 +84,24 @@ public class ConnectorServiceAPI {
         }
     }
 
+    public Server getJoinableServer(Filter filter, String uuid){
+        try {
+            HttpRequest req = Unirest.get(url("/joinable/{uuid}"))
+                    .routeParam("uuid", uuid);
+            if (filter.getGameId() != null)
+                req.queryString("gameId", filter.getGameId());
+            if (filter.getMapId() != null)
+                req.queryString("mapId", filter.getMapId());
+            if (filter.getFlavorId() != null)
+                req.queryString("flavorId", filter.getFlavorId());
+            String body = req.asString().getBody();
+            Server server = GSON.fromJson(body, Server.class);
+            return server;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     private String url(String endpoint) {
         return address + endpoint;
