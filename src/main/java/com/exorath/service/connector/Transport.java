@@ -47,7 +47,7 @@ public class Transport {
                     .withGameId(req.queryParams("gameId"))
                     .withFlavorId(req.queryParams("flavorId"))
                     .withMapId(req.queryParams("mapId"));
-            return service.joinServer(req.params("uuid"), filter);
+            return service.getJoinableServer(filter, req.params("uuid"));
         };
     }
 
