@@ -50,7 +50,7 @@ public class SimpleService implements Service {
             return new JoinSuccess(false, null, "Received server without serverId.");
         if (!serverToJoin.isJoinable())
             return new JoinSuccess(false, null, "Found server, but it's not joinable.");
-        if (serverToJoin.getMaxPlayerCount() <= serverToJoin.getPlayerCount())
+        if (serverToJoin.getMaxPlayerCount() != 0 && serverToJoin.getMaxPlayerCount() <= serverToJoin.getPlayerCount())
             return new JoinSuccess(false, null, "Found server, but there are too many players.");
         //TODO: Dispatch join request through ActionAPIProvider
         return new JoinSuccess(true, serverToJoin.getServerId());

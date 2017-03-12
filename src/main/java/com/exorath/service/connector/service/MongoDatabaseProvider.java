@@ -25,8 +25,10 @@ import com.exorath.service.connector.res.Success;
 import com.mongodb.*;
 import org.bson.Document;
 import org.mongodb.morphia.*;
+import org.mongodb.morphia.query.Criteria;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
+import org.mongodb.morphia.query.WhereCriteria;
 
 /**
  * Created by toonsev on 11/8/2016.
@@ -53,8 +55,8 @@ public class MongoDatabaseProvider implements DatabaseProvider {
         this.collectionName = collectionName;
         try {
             client.getDatabase(databaseName).createCollection(collectionName);
-        }catch (MongoCommandException e){
-            if(e.getErrorCode() != 48)
+        } catch (MongoCommandException e) {
+            if (e.getErrorCode() != 48)
                 throw e;
         }
     }
@@ -89,9 +91,9 @@ public class MongoDatabaseProvider implements DatabaseProvider {
                         "return ret;" +
                         "}", null, MapReduceCommand.OutputType.INLINE, builder.get());
         MapReduceOutput results = datastore.getDB().getCollection(collectionName).mapReduce(mapReduceCommand);
-        if(results.getOutputCount() == 0)
+        if (results.getOutputCount() == 0)
             return new ServerInfo(0, 0, 0, 0, System.currentTimeMillis());
-        if(results.getOutputCount() > 1)
+        if (results.getOutputCount() > 1)
             throw new IllegalStateException("mapReduce returned multiple results.");
         for (DBObject res : results.results()) {
             DBObject val = (DBObject) res.get("value");
@@ -124,12 +126,13 @@ public class MongoDatabaseProvider implements DatabaseProvider {
 
     @Override
     public Server getJoinableServer(Filter filter, String uuid) {
-        Query<Server> query = getFilterQuery(filter)
-                .field("joinable")
-                .equal(true)
-                .where("this.pc < this.mpc")
-                .field("expiry").greaterThan(System.currentTimeMillis())
-                .limit(1);
+        Query<Server> query = getFilterQuery(filter);
+        query.and(getServerQuery().criteria("joinable").equal(true),
+                getServerQuery().criteria("expiry").greaterThan(System.currentTimeMillis()),
+                getServerQuery()
+                        .or(new WhereCriteria("this.mpc > this.pc"),
+                                getServerQuery().criteria("mpc").equal(0)));
+        query.limit(1);
         query.order("pc");
         query.getSortObject().put("pc", -1);
 
