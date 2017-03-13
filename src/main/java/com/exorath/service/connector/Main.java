@@ -16,6 +16,7 @@
 
 package com.exorath.service.connector;
 
+import com.exorath.service.actionapi.api.ActionAPIServiceAPI;
 import com.exorath.service.commons.mongoProvider.MongoProvider;
 import com.exorath.service.commons.portProvider.PortProvider;
 import com.exorath.service.commons.tableNameProvider.TableNameProvider;
@@ -36,12 +37,20 @@ public class Main {
         DatabaseProvider databaseProvider = new MongoDatabaseProvider(MongoProvider.getEnvironmentMongoProvider().getClient(),
                 TableNameProvider.getEnvironmentTableNameProvider("DB_NAME").getTableName(),
                 TableNameProvider.getEnvironmentTableNameProvider("SERVERS_COL_NAME").getTableName());
-        this.service = new SimpleService(databaseProvider);
+        this.service = new SimpleService(databaseProvider, new ActionAPIServiceAPI(getActionAPIAddress()));
         LOG.info("Service " + this.service.getClass() + " instantiated");
         Transport.setup(service, PortProvider.getEnvironmentPortProvider());
         LOG.info("HTTP Transport initiated");
     }
 
+    public String getActionAPIAddress(){
+        String actionAPIAdress =  System.getenv("ACTIONAPI_SERVICE_ADDRESS");
+        if(actionAPIAdress == null){
+            System.out.println("No ACTIONAPI_SERVICE_ADDRESS environment variable set");
+            System.exit(1);
+        }
+        return actionAPIAdress;
+    }
     public static void main(String[] args) {
         new Main();
     }
