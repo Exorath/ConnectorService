@@ -16,6 +16,9 @@
 
 package com.exorath.service.connector.service;
 
+import com.exorath.service.actionapi.api.ActionAPIServiceAPI;
+import com.exorath.service.actionapi.api.bungee.JoinAction;
+import com.exorath.service.actionapi.res.Action;
 import com.exorath.service.connector.Service;
 import com.exorath.service.connector.res.*;
 import com.google.gson.Gson;
@@ -26,9 +29,11 @@ import com.google.gson.Gson;
 public class SimpleService implements Service {
     private static final Gson GSON = new Gson();
     private DatabaseProvider databaseProvider;
+    private ActionAPIServiceAPI actionAPIServiceAPI;
 
-    public SimpleService(DatabaseProvider databaseProvider) {
+    public SimpleService(DatabaseProvider databaseProvider, ActionAPIServiceAPI actionAPIServiceAPI) {
         this.databaseProvider = databaseProvider;
+        this.actionAPIServiceAPI = actionAPIServiceAPI;
     }
 
     public ServerInfo getServerInfo(Filter filter, Long minLastUpdate) {
@@ -52,7 +57,8 @@ public class SimpleService implements Service {
             return new JoinSuccess(false, null, "Found server, but it's not joinable.");
         if (serverToJoin.getMaxPlayerCount() != 0 && serverToJoin.getMaxPlayerCount() <= serverToJoin.getPlayerCount())
             return new JoinSuccess(false, null, "Found server, but there are too many players.");
-        //TODO: Dispatch join request through ActionAPIProvider
+        if(actionAPIServiceAPI != null)
+            actionAPIServiceAPI.publishAction(new JoinAction(uuid, serverToJoin.getSocket()));
         return new JoinSuccess(true, serverToJoin.getServerId());
     }
 
