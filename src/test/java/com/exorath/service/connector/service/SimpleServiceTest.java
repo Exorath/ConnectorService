@@ -34,7 +34,7 @@ public class SimpleServiceTest {
     @Before
     public void setup() {
         dbProvider = new MemDatabaseProvider();
-        service = new SimpleService(dbProvider);
+        service = new SimpleService(dbProvider, null);
     }
 
     //JoinServer tests

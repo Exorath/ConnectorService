@@ -61,7 +61,7 @@ public class MongoDatabaseTest {
                 .build());
         _mongod = _mongodExe.start();
         mongo = new MongoClient("localhost", port);
-        service = new SimpleService(new MongoDatabaseProvider(mongo, dbName, collName));
+        service = new SimpleService(new MongoDatabaseProvider(mongo, dbName, collName), null);
     }
 
     @After
