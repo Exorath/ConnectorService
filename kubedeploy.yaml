@@ -40,3 +40,5 @@ spec:
           value: "connectorservice"
         - name: SERVERS_COL_NAME
           value: "servers"
+        - name: ACTIONAPI_SERVICE_ADDRESS:
+          value: "{ip:port}"
